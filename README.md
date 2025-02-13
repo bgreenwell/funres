@@ -8,10 +8,10 @@ The goal of **funres** is to ...
 
 ## Installation
 
-You can install the development version of funres like so:
-
+Currently, you can only install the **funres** package from GitHub:
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+# install.packages("remotes")
+remotes::install_github("bgreenwell/ebm")
 ```
 
 ## Example
