@@ -1,0 +1,9 @@
+pandoc: 3.1.11
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles:
+  intro: intro.html
+last_built: 2025-02-13T21:41Z
+urls:
+  reference: https://bgreenwell.github.io/funres/reference
+  article: https://bgreenwell.github.io/funres/articles
