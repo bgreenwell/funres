@@ -2,21 +2,66 @@
 % Please edit documentation in R/fresiduals.R
 \name{fresiduals}
 \alias{fresiduals}
-\alias{fresiduals.vglm}
-\title{Functional residuals}
+\title{Function residuals}
 \usage{
-fresiduals(object, ...)
-
-\method{fresiduals}{vglm}(object, ...)
+fresiduals(
+  object,
+  type = c("function", "surrogate", "probscale"),
+  link.scale = TRUE,
+  ...
+)
 }
 \arguments{
-\item{object}{An object of class \link[VGAM:vglm]{vglm}.}
+\item{object}{A fitted model object.}
 
-\item{...}{Additional optional arguments. (Currently ignored.)}
+\item{type}{Character string specifying the type of residual to compute.
+Current options include:
+\itemize{
+\item \code{"function"} - (the default) for a list of functional residuals;
+\item \code{"surrogate"} for a sample of surrogate residuals;
+\item \code{"probscale"} for probability-scale residuals.
+}}
+
+\item{link.scale}{Logical indicating whether or not surrogate residuals
+(\code{type = "surrogate"}) should be returned on the link scale (\code{TRUE}) vs. the
+probability scale (\code{FALSE}). Default is \code{TRUE}.}
+
+\item{...}{Additional optional arguments. Currently ignored.}
 }
 \value{
-An \code{n}-by-2 matrix...
+Either a list of functions (\code{type = "function"}) or a vector of
+residuals.
 }
 \description{
-Computes the function residual for XYZ as described in XYZ.
+Computes the function residual described in \url{TBD}.
+}
+\examples{
+# Generate data from a logistic regression model with quadratic form
+set.seed(1217)
+n <- 10000
+x <- rnorm(n)
+z <- 1 - 2*x + 3*x^2 + rlogis(n)
+y <- ifelse(z > 0, 1, 0)
+
+# Fit models with/without quadratic term
+fit.wrong <- glm(y ~ x, family = binomial)  # wrong
+fit.right <- glm(y ~ x + I(x^2), family = binomial)  # right
+
+# Surrogate residual vs. predictor plot for each model
+par(mfrow = c(1, 2), las = 1)
+lpars <- list(col = 2, lwd = 2)
+col <- adjustcolor(1, alpha.f = 0.1)
+palette("Okabe-Ito")
+scatter.smooth(x, y = fresiduals(fit.wrong, type = "surrogate"),
+               lpars = lpars, col = col, main = "Wrong model",
+               xlab = "x", ylab = "Surrogate residual")
+abline(h = 0, col = 3, lty = 2)
+scatter.smooth(x, y = fresiduals(fit.right, type = "surrogate"),
+               lpars = lpars, col = col, main = "Correct model",
+               xlab = "x", ylab = "Surrogate residual")
+abline(h = 0, col = 3, lty = 2)
+
+}
+\references{
+TBD.
 }

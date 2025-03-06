@@ -1,64 +1,76 @@
-#' Functional residuals
+#' Function residuals
 #'
-#' Computes the function residual for XYZ as described in XYZ.
+#' Computes the function residual described in [TBD]().
 #'
-#' @param object An object of class [vglm][VGAM::vglm()].
+#' @param object A fitted model object.
 #'
-#' @param ... Additional optional arguments. (Currently ignored.)
+#' @param type Character string specifying the type of residual to compute.
+#' Current options include:
+#' * `"function"` - (the default) for a list of functional residuals;
+#' * `"surrogate"` for a sample of surrogate residuals;
+#' * `"probscale"` for probability-scale residuals.
 #'
-#' @returns An `n`-by-2 matrix...
+#' @param link.scale Logical indicating whether or not surrogate residuals
+#' (`type = "surrogate"`) should be returned on the link scale (`TRUE`) vs. the
+#' probability scale (`FALSE`). Default is `TRUE`.
 #'
-#' @importFrom VGAM fitted
+#' @param ... Additional optional arguments. Currently ignored.
+#'
+#' @return Either a list of functions (`type = "function"`) or a vector of
+#' residuals.
+#'
+#' @references
+#' TBD.
+#'
+#' @examples
+#' # Generate data from a logistic regression model with quadratic form
+#' set.seed(1217)
+#' n <- 10000
+#' x <- rnorm(n)
+#' z <- 1 - 2*x + 3*x^2 + rlogis(n)
+#' y <- ifelse(z > 0, 1, 0)
+#'
+#' # Fit models with/without quadratic term
+#' fit.wrong <- glm(y ~ x, family = binomial)  # wrong
+#' fit.right <- glm(y ~ x + I(x^2), family = binomial)  # right
+#'
+#' # Surrogate residual vs. predictor plot for each model
+#' par(mfrow = c(1, 2), las = 1)
+#' lpars <- list(col = 2, lwd = 2)
+#' col <- adjustcolor(1, alpha.f = 0.1)
+#' palette("Okabe-Ito")
+#' scatter.smooth(x, y = fresiduals(fit.wrong, type = "surrogate"),
+#'                lpars = lpars, col = col, main = "Wrong model",
+#'                xlab = "x", ylab = "Surrogate residual")
+#' abline(h = 0, col = 3, lty = 2)
+#' scatter.smooth(x, y = fresiduals(fit.right, type = "surrogate"),
+#'                lpars = lpars, col = col, main = "Correct model",
+#'                xlab = "x", ylab = "Surrogate residual")
+#' abline(h = 0, col = 3, lty = 2)
 #'
 #' @export
-fresiduals <- function(object, ...) {
-  UseMethod("fresiduals")
-}
-
-
-#' @rdname fresiduals
-#'
-#' @export
-fresiduals.vglm <- function(object, ...) {
-
-  ##############################################################################
-  #
-  # Question: What is the goal of this code chunk? From what I can tell, you're
-  # trying to grab the class index associated with each row. If so, this does
-  # not work when the response vector is a factor or character string because
-  # the column names will be character string, so I made some modifications.
-  #
-  # FIXME: Grab class associated with max probability in each row? What if the
-  # class names are not integers like in the simulation code?
-  # y <- apply(model@y, MARGIN = 1, FUN = function(j) {
-  #   # colnames(model@y)[which.max(j)]
-  #   which.max(j)  # FIXME: Grab column idx instead?
-  # })
-  # The following step should not be needed if the above code is correct.
-  # y_values <- y - min(y) + 1  # Make sure y values are 1, 2, 3, ..., J?
-  #
-  # Question: Grab fitted values/probabilites for each class, but append a
-  # column of zeros to the beginning?
-  #
-  # probs <- cbind.data.frame(rep(0,nrow(model@y)),fitted(model))
-  #
-  # # Initialize a matrix to store cumulative probabilities
-  # result <- matrix(NA, nrow = length(y_values), ncol = 2)
-  #
-  # # Loop through each observation
-  # for (i in 1:length(y_values)) {
-  #   # Calculate the cumulative sum of probabilities for the range before and including the current class
-  #   result[i, ] <- c(sum(probs[i, 1:y_values[i]]), sum(probs[i, 1:(y_values[i]+1)]))
-  # }
-  ##############################################################################
-
-  # Minimal, perhaps more robust version of the above code
-  y <- apply(object@y, MARGIN = 1, FUN = function(j) which.max(j))
-  cumprobs <- cbind(0, t(apply(fitted(object), MARGIN = 1, FUN = cumsum)))
-  res <- cbind(
-    cumprobs[cbind(seq_along(y), y)],     # P(Y < y_i)  (e.g., will be 0 if y_i = 1)
-    cumprobs[cbind(seq_along(y), y + 1)]  # P(Y <= y_i) (e.g., will be 1 if y_i = J)
-  )
-  class(res) <- c("fresiduals", class(res))
-  res
+fresiduals <- function(object, type = c("function", "surrogate", "probscale"),
+                       link.scale = TRUE, ...) {
+  uend <- unifend(object)  # compute uniform endpoints for function residuals
+  type <- match.arg(type)
+  if (type == "function") {
+    res <- apply(uend, MARGIN = 1, FUN = function(endpoints) {
+      function(t) punif(t, min = endpoints[1L], max = endpoints[2L])
+    })
+  } else if (type == "surrogate") {
+    runifs <- apply(uend, MARGIN = 1, FUN = function(endpoints) {
+      function(n) runif(n, min = endpoints[1L], max = endpoints[2L])
+    })
+    # sapply(runifs, FUN = function(sampler) mean(sampler(300)))
+    res <- sapply(runifs, FUN = function(sampler) sampler(1))
+    if (isTRUE(link.scale)) {
+      linkfun <- object$family$linkfun
+      res <- linkfun(res)
+    }
+  } else {
+    res <- apply(uend, MARGIN = 1, FUN = function(endpoints) {
+      2*mean(endpoints) - 1
+    })
+  }
+  return(res)
 }
