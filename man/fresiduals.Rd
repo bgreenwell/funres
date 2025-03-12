@@ -63,5 +63,5 @@ abline(h = 0, col = 3, lty = 2)
 
 }
 \references{
-TBD.
+TODO: Reference paper when published in JASA.
 }

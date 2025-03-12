@@ -68,7 +68,7 @@ fredplot <- function(
   } else {
     # Deal with extreme cases of z = {0, 1}
     y[y == 0] <- 1e-6  # replace 0s with 0.000001
-    y[y == 1] <- y - 1e-6  # replace 1s with 0.999999
+    y[y == 1] <- 1 - 1e-6  # replace 1s with 0.999999
     data.frame("x" = x, "y" = stats::qnorm(y))
   }
 
@@ -76,11 +76,14 @@ fredplot <- function(
   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y))
   geom <- match.arg(geom)
   if (geom == "hex") {
-    p <- p + ggplot2::geom_hex(...)
+    p <- p + ggplot2::geom_hex(...) +
+      ggplot2::scale_fill_distiller(palette = "Spectral")
   } else if (geom == "kde") {
-    p <- p + ggplot2::geom_density_2d_filled(...)
+    p <- p + ggplot2::geom_density_2d_filled(...) +
+      ggplot2::scale_fill_brewer(palette = "Spectral")
   } else {
-    p <- p + ggplot2::geom_bin2d(...)
+    p <- p + ggplot2::geom_bin2d(...) +
+      ggplot2::scale_fill_distiller(palette = "Spectral")
   }
   return(p)
 

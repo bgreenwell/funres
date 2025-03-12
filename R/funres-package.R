@@ -2,6 +2,6 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @importFrom stats family fitted punif runif
+#' @importFrom stats family fitted ppois pnbinom punif runif
 ## usethis namespace: end
 NULL

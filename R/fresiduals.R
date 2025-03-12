@@ -20,19 +20,23 @@
 #' residuals.
 #'
 #' @references
-#' TBD.
+#' TODO: Reference paper when published in JASA.
 #'
 #' @examples
 #' # Generate data from a logistic regression model with quadratic form
 #' set.seed(1217)
 #' n <- 10000
 #' x <- rnorm(n)
+#' x[1] <- 100  # add an outlier
 #' z <- 1 - 2*x + 3*x^2 + rlogis(n)
 #' y <- ifelse(z > 0, 1, 0)
 #'
 #' # Fit models with/without quadratic term
 #' fit.wrong <- glm(y ~ x, family = binomial)  # wrong
 #' fit.right <- glm(y ~ x + I(x^2), family = binomial)  # right
+#'
+#' # Generate functional residuals
+#' fres.wrong <- fresiduals(fit.wrong)
 #'
 #' # Surrogate residual vs. predictor plot for each model
 #' par(mfrow = c(1, 2), las = 1)

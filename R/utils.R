@@ -11,11 +11,9 @@ unifend <- function(object, y = NULL, fill = FALSE, ...) {
 #' Support for generalized linear models (GLMs) fit via the core stats package.
 unifend.glm <- function(object, y = NULL, ...) {
 
-  # Get family name as character string
-  fam <- family(object)$family
-
-  # Get response vector
-  if (is.null(y)) {
+  # Extract needed components
+  fam <- family(object)$family  # get family name as character string
+  if (is.null(y)) {  # get response vector
     if (is.null(object$y)) {
       stop("No response vector could be found, please supply it ",
            "using the `y` argument.", call. = FALSE)
@@ -23,33 +21,32 @@ unifend.glm <- function(object, y = NULL, ...) {
       y <- object$y
     }
   }
+  fv <- object$fitted.values  # get fitted values
 
-  # Extract fitted values
-  fv <- object$fitted.values  # E.g., P(Y=1|X) for binomial family
-
-
-  ##############################################################################
-  # Family: binomial or quasibinomial
-  ##############################################################################
-  if (fam %in% c("binomial", "quasibinomial")) {
-
-    # Get predicted probabilities
-    res <- cbind(
+  # Compute and return endpoints for function residual
+  endpoints <- if (fam == "binomial") {
+    # FIXME: What about quasi-binomial?
+    cbind(
       "lwr" = ifelse(y == 1, 1 - fv, 0),
       "upr" = ifelse(y == 1, 1, 1 - fv)
     )
-
-    ##############################################################################
-    # Family: poisson or quasipoisson
-    ##############################################################################
   } else if (fam %in% c("poisson", "quasipoisson")) {
-    NULL
+    if (fam == "quasipoisson") {
+      phi <- summary(object)$dispersion
+      cbind(
+        "lwr" = pnbinom(y - 1, size = fv / phi, mu = fv),
+        "upr" = pnbinom(y, size = fv / phi, mu = fv)
+      )
+    } else {
+      cbind(
+        "lwr" = ppois(y - 1, lambda = fv),
+        "upr" = ppois(y, lambda = fv)
+      )
+    }
   } else {
     stop("Unsupported family type.", call. = FALSE)
   }
-
-  # Return endpoints
-  return(res)
+  return(endpoints)
 
 }
 

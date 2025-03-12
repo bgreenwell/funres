@@ -11,7 +11,7 @@ The goal of **funres** is to ...
 Currently, you can only install the **funres** package from GitHub:
 ``` r
 # install.packages("remotes")
-remotes::install_github("bgreenwell/ebm")
+remotes::install_github("bgreenwell/funres")
 ```
 
 ## Example
