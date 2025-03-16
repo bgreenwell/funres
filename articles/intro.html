@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Introduction to the funres package • funres</title>
+<title>Computing and visualizing functional residuals with the funres package • funres</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to the funres package">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Computing and visualizing functional residuals with the funres package">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -33,9 +33,10 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/intro.html">Introduction to the funres package</a></li>
+<li><a class="dropdown-item" href="../articles/intro.html">Computing and visualizing functional residuals with the funres package</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -54,7 +55,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Introduction to the funres package</h1>
+      <h1>Computing and visualizing functional residuals with the funres package</h1>
             
       
 
@@ -63,108 +64,240 @@
 
     
     
-<p><strong>WARNING</strong>: This vignette is very much a work in
-progress and is subject to change as the package evolves!</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.stat.auckland.ac.nz/~yee/VGAM/" class="external-link">VGAM</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bgreenwell.github.io/funres/">funres</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>First, let’s simulate some ordinal data:</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bgreenwell.github.io/funres/">funres</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="currently-supported-models">Currently supported models<a class="anchor" aria-label="anchor" href="#currently-supported-models"></a>
+</h2>
+<table class="table">
+<thead><tr class="header">
+<th align="left">Model type</th>
+<th align="left">Family</th>
+<th align="left">Package</th>
+<th align="left">Function</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">GLM</td>
+<td align="left">Binomial</td>
+<td align="left"><strong>stats</strong></td>
+<td align="left"><code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code></td>
+</tr>
+<tr class="even">
+<td align="left">GLM</td>
+<td align="left">Poisson</td>
+<td align="left"><strong>stats</strong></td>
+<td align="left"><code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code></td>
+</tr>
+<tr class="odd">
+<td align="left">GLM</td>
+<td align="left">Quasi-Poisson</td>
+<td align="left"><strong>stats</strong></td>
+<td align="left"><code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code></td>
+</tr>
+<tr class="even">
+<td align="left">GAM</td>
+<td align="left">Binomial</td>
+<td align="left"><strong>mgcv</strong></td>
+<td align="left"><code>gam()</code></td>
+</tr>
+<tr class="odd">
+<td align="left">GAM</td>
+<td align="left">Poisson</td>
+<td align="left"><strong>mgcv</strong></td>
+<td align="left"><code>gam()</code></td>
+</tr>
+<tr class="even">
+<td align="left">GAM</td>
+<td align="left">Quasi-Poisson</td>
+<td align="left"><strong>mgcv</strong></td>
+<td align="left"><code>gam()</code></td>
+</tr>
+<tr class="odd">
+<td align="left">Ordinal</td>
+<td align="left">NA</td>
+<td align="left"><strong>VGAM</strong></td>
+<td align="left">
+<code><a href="https://rdrr.io/pkg/VGAM/man/vgam.html" class="external-link">vgam()</a></code> and <code><a href="https://rdrr.io/pkg/VGAM/man/vgam.html" class="external-link">vgam()</a></code>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="logistic-regression">Logistic regression<a class="anchor" aria-label="anchor" href="#logistic-regression"></a>
+</h2>
+<p>We’ll start by generating data from a quadratic logistic regression
+(LR) model:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
-<span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="va">x1</span> <span class="op">^</span> <span class="fl">2</span></span>
-<span><span class="va">eta1</span> <span class="op">&lt;-</span> <span class="fl">1.5</span><span class="op">*</span><span class="va">x1</span> <span class="op">-</span> <span class="va">x2</span></span>
-<span><span class="va">eta2</span> <span class="op">&lt;-</span> <span class="fl">1.5</span> <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span><span class="va">x1</span> <span class="op">-</span> <span class="va">x2</span></span>
-<span><span class="va">eta3</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">1</span> <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span><span class="va">x1</span> <span class="op">-</span> <span class="va">x2</span></span>
-<span><span class="va">eta4</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span><span class="va">x1</span> <span class="op">-</span> <span class="va">x2</span></span>
-<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">eta1</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">)</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">+</span><span class="va">eta3</span><span class="op">)</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">+</span><span class="va">eta3</span><span class="op">+</span><span class="va">eta4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">eta1</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">eta1</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">)</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">+</span><span class="va">eta3</span><span class="op">)</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">+</span><span class="va">eta3</span><span class="op">+</span><span class="va">eta4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">eta1</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">)</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">+</span><span class="va">eta3</span><span class="op">)</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">+</span><span class="va">eta3</span><span class="op">+</span><span class="va">eta4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">+</span><span class="va">eta3</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">eta1</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">)</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">+</span><span class="va">eta3</span><span class="op">)</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">+</span><span class="va">eta3</span><span class="op">+</span><span class="va">eta4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">+</span><span class="va">eta3</span><span class="op">+</span><span class="va">eta4</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">eta1</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">)</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">+</span><span class="va">eta3</span><span class="op">)</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="va">eta1</span><span class="op">+</span><span class="va">eta2</span><span class="op">+</span><span class="va">eta3</span><span class="op">+</span><span class="va">eta4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p3</span>, <span class="va">p4</span>, <span class="va">p5</span><span class="op">)</span></span>
-<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x1</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">y</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span>, replace <span class="op">=</span> <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="va">pr</span><span class="op">[</span><span class="va">i</span>,<span class="op">]</span><span class="op">)</span> </span>
-<span><span class="op">}</span></span>
-<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">y</span><span class="op">)</span></span></code></pre></div>
-<p>Next, we’ll fit an adjacent categories regression model:</p>
+<code class="sourceCode R"><span><span class="co"># Generate data from a logistic regression model with quadratic form</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1217</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span><span class="co"># x[1] &lt;- 10  # add an outlier</span></span>
+<span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="fl">2</span><span class="op">*</span><span class="va">x</span> <span class="op">+</span> <span class="fl">3</span><span class="op">*</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html" class="external-link">rlogis</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">z</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Fit a couple of LR models</span></span>
+<span><span class="va">fit.bad</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span>  <span class="co"># wrong</span></span>
+<span><span class="va">fit.good</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span>  <span class="co"># right</span></span>
+<span><span class="co">#&gt; Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="functional-residuals">Functional residuals<a class="anchor" aria-label="anchor" href="#functional-residuals"></a>
+</h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/VGAM/man/vglm.html" class="external-link">vglm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, data <span class="op">=</span> <span class="va">df</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/VGAM/man/acat.html" class="external-link">acat</a></span><span class="op">(</span>reverse <span class="op">=</span> <span class="cn">TRUE</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in checkwz(wz, M = M, trace = trace, wzepsilon = control$wzepsilon): 2</span></span>
-<span><span class="co">#&gt; diagonal elements of the working weights variable 'wz' have been replaced by</span></span>
-<span><span class="co">#&gt; 1.819e-12</span></span>
-<span><span class="co">#&gt; Warning in checkwz(wz, M = M, trace = trace, wzepsilon = control$wzepsilon): 10</span></span>
-<span><span class="co">#&gt; diagonal elements of the working weights variable 'wz' have been replaced by</span></span>
-<span><span class="co">#&gt; 1.819e-12</span></span>
-<span><span class="co">#&gt; Warning in checkwz(wz, M = M, trace = trace, wzepsilon = control$wzepsilon): 28</span></span>
-<span><span class="co">#&gt; diagonal elements of the working weights variable 'wz' have been replaced by</span></span>
-<span><span class="co">#&gt; 1.819e-12</span></span>
-<span><span class="co">#&gt; Warning in checkwz(wz, M = M, trace = trace, wzepsilon = control$wzepsilon): 37</span></span>
-<span><span class="co">#&gt; diagonal elements of the working weights variable 'wz' have been replaced by</span></span>
-<span><span class="co">#&gt; 1.819e-12</span></span>
-<span><span class="co">#&gt; Warning in checkwz(wz, M = M, trace = trace, wzepsilon = control$wzepsilon): 37</span></span>
-<span><span class="co">#&gt; diagonal elements of the working weights variable 'wz' have been replaced by</span></span>
-<span><span class="co">#&gt; 1.819e-12</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; vglm(formula = y ~ x1 + x2, family = acat(reverse = TRUE, parallel = TRUE), </span></span>
-<span><span class="co">#&gt;     data = df)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Coefficients: </span></span>
-<span><span class="co">#&gt;               Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
-<span><span class="co">#&gt; (Intercept):1 -0.03430    0.10221  -0.336    0.737    </span></span>
-<span><span class="co">#&gt; (Intercept):2  1.18243    0.15518   7.620 2.54e-14 ***</span></span>
-<span><span class="co">#&gt; (Intercept):3 -0.67463    0.16056  -4.202 2.65e-05 ***</span></span>
-<span><span class="co">#&gt; (Intercept):4  0.89478    0.14284   6.264 3.75e-10 ***</span></span>
-<span><span class="co">#&gt; x1             1.61480    0.09665  16.707  &lt; 2e-16 ***</span></span>
-<span><span class="co">#&gt; x2            -1.04286    0.06774 -15.396  &lt; 2e-16 ***</span></span>
-<span><span class="co">#&gt; ---</span></span>
-<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Names of linear predictors: loglink(P[Y=1]/P[Y=2]), loglink(P[Y=2]/P[Y=3]), </span></span>
-<span><span class="co">#&gt; loglink(P[Y=3]/P[Y=4]), loglink(P[Y=4]/P[Y=5])</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Residual deviance: 2031.804 on 3994 degrees of freedom</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Log-likelihood: -1015.902 on 3994 degrees of freedom</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of Fisher scoring iterations: 7 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; No Hauck-Donner effect found in any of the estimates</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Exponentiated coefficients:</span></span>
-<span><span class="co">#&gt;        x1        x2 </span></span>
-<span><span class="co">#&gt; 5.0268945 0.3524438</span></span></code></pre></div>
-<p>Finally, we’ll compute the functional residuals and construct a
-functional residual-vs-predictor plot.</p>
+<code class="sourceCode R"><span><span class="va">fres.bad</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fresiduals.html">fresiduals</a></span><span class="op">(</span><span class="va">fit.bad</span><span class="op">)</span></span>
+<span><span class="va">fres.good</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fresiduals.html">fresiduals</a></span><span class="op">(</span><span class="va">fit.good</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, las <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fres.bad</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, xlab <span class="op">=</span> <span class="st">"t"</span>, ylab <span class="op">=</span> <span class="st">"F(t)"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fres.good</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, xlab <span class="op">=</span> <span class="st">"t"</span>, ylab <span class="op">=</span> <span class="st">"F(t)"</span><span class="op">)</span>  <span class="co"># plot FRs for first observation</span></span></code></pre></div>
+<p><img src="intro_files/figure-html/unnamed-chunk-3-1.png" width="70%"></p>
+<p>Does plotting them all tell us anything interesting?</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fresiduals.html">fresiduals</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">fr</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             [,1]       [,2]</span></span>
-<span><span class="co">#&gt; [1,] 0.171904759 1.00000000</span></span>
-<span><span class="co">#&gt; [2,] 0.396681368 0.74813270</span></span>
-<span><span class="co">#&gt; [3,] 0.000000000 0.46054607</span></span>
-<span><span class="co">#&gt; [4,] 0.001952785 0.08884917</span></span>
-<span><span class="co">#&gt; [5,] 0.000000000 0.43028185</span></span>
-<span><span class="co">#&gt; [6,] 0.330560589 0.65672221</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">fr</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "fresiduals" "matrix"     "array"</span></span>
-<span><span class="fu"><a href="../reference/frplot.html">frplot</a></span><span class="op">(</span><span class="va">fr</span>, x <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">x1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; `geom_smooth()` using formula = 'y ~ x'</span></span></code></pre></div>
-<p><img src="intro_files/figure-html/fres-1.png" width="70%"></p>
-  </main>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fres.bad</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, xlab <span class="op">=</span> <span class="st">"t"</span>, ylab <span class="op">=</span> <span class="st">"F(t)"</span>, las <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
+<span><span class="va">tt</span> <span class="op">&lt;-</span> <span class="fl">0</span><span class="op">:</span><span class="fl">100</span><span class="op">/</span><span class="fl">100</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">fres.bad</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">tt</span>, <span class="va">fres.bad</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">(</span><span class="va">tt</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html" class="external-link">adjustcolor</a></span><span class="op">(</span><span class="fl">1</span>, alpha.f <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p><img src="intro_files/figure-html/unnamed-chunk-4-1.png" width="70%"></p>
+</div>
+<div class="section level3">
+<h3 id="surrogate-and-probability-scale-residuals">Surrogate and probability-scale residuals<a class="anchor" aria-label="anchor" href="#surrogate-and-probability-scale-residuals"></a>
+</h3>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sr.bad</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fresiduals.html">fresiduals</a></span><span class="op">(</span><span class="va">fit.bad</span>, type <span class="op">=</span> <span class="st">"surrogate"</span><span class="op">)</span></span>
+<span><span class="va">sr.good</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fresiduals.html">fresiduals</a></span><span class="op">(</span><span class="va">fit.good</span>, type <span class="op">=</span> <span class="st">"surrogate"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">col</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html" class="external-link">adjustcolor</a></span><span class="op">(</span><span class="fl">1</span>, alpha.f <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">sr.bad</span>, col <span class="op">=</span> <span class="va">col</span>, las <span class="op">=</span> <span class="fl">1</span>, ylab <span class="op">=</span> <span class="st">"Surrogate residual"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lowess.html" class="external-link">lowess</a></span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">sr.bad</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"red2"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">sr.good</span>, col <span class="op">=</span> <span class="va">col</span>, las <span class="op">=</span> <span class="fl">1</span>, ylab <span class="op">=</span> <span class="st">"Surrogate residual"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lowess.html" class="external-link">lowess</a></span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">sr.good</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"red2"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="intro_files/figure-html/unnamed-chunk-5-1.png" width="70%"></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Probability-scale residuals</span></span>
+<span><span class="va">ps.bad</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fresiduals.html">fresiduals</a></span><span class="op">(</span><span class="va">fit.bad</span>, type <span class="op">=</span> <span class="st">"probscale"</span><span class="op">)</span></span>
+<span><span class="va">ps.good</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fresiduals.html">fresiduals</a></span><span class="op">(</span><span class="va">fit.good</span>, type <span class="op">=</span> <span class="st">"probscale"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">ps.bad</span>, col <span class="op">=</span> <span class="va">col</span>, las <span class="op">=</span> <span class="fl">1</span>, ylab <span class="op">=</span> <span class="st">"Surrogate residual"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lowess.html" class="external-link">lowess</a></span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">sr.bad</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"red2"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">ps.good</span>, col <span class="op">=</span> <span class="va">col</span>, las <span class="op">=</span> <span class="fl">1</span>, ylab <span class="op">=</span> <span class="st">"Surrogate residual"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lowess.html" class="external-link">lowess</a></span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">sr.good</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"red2"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="intro_files/figure-html/unnamed-chunk-6-1.png" width="70%"></p>
+</div>
+<div class="section level3">
+<h3 id="functional-residual-density-fred-plots">Functional residual density (FRED) plots<a class="anchor" aria-label="anchor" href="#functional-residual-density-fred-plots"></a>
+</h3>
+<p>The FRED plots in R are based on the Trellis framework (e.g.,
+<strong>lattice</strong>), which rely on <strong>grid</strong> graphics.
+The <code><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">gridExtra::grid.arrange()</a></code> function is the most
+convenient approach to arranging several plots here. These graphs are
+quicker to produce compared to <strong>ggplot2</strong>.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Two-dimensional kernel density estimation</span></span>
+<span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/fredplot.html">fredplot</a></span><span class="op">(</span><span class="va">fit.bad</span>, x <span class="op">=</span> <span class="va">x</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/fredplot.html">fredplot</a></span><span class="op">(</span><span class="va">fit.good</span>, x <span class="op">=</span> <span class="va">x</span><span class="op">)</span>,</span>
+<span>  nrow <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="intro_files/figure-html/unnamed-chunk-7-1.png" width="70%"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Hexagonal binning</span></span>
+<span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/fredplot.html">fredplot</a></span><span class="op">(</span><span class="va">fit.bad</span>, x <span class="op">=</span> <span class="va">x</span>, type <span class="op">=</span> <span class="st">"hex"</span>, aspect <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/fredplot.html">fredplot</a></span><span class="op">(</span><span class="va">fit.good</span>, x <span class="op">=</span> <span class="va">x</span>, type <span class="op">=</span> <span class="st">"hex"</span>, aspect <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  nrow <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="intro_files/figure-html/unnamed-chunk-7-2.png" width="70%"></p>
+</div>
+<div class="section level3">
+<h3 id="function-function-plots">Function-function plots<a class="anchor" aria-label="anchor" href="#function-function-plots"></a>
+</h3>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/palette.html" class="external-link">palette</a></span><span class="op">(</span><span class="st">"Okabe-Ito"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/ffplot.html">ffplot</a></span><span class="op">(</span><span class="va">fit.bad</span>, n <span class="op">=</span> <span class="fl">500</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/ffplot.html">ffplot</a></span><span class="op">(</span><span class="va">fit.good</span>, n <span class="op">=</span> <span class="fl">500</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="intro_files/figure-html/unnamed-chunk-8-1.png" width="70%"></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/palette.html" class="external-link">palette</a></span><span class="op">(</span><span class="st">"default"</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="ordinal-model-example-with-vgam-package">Ordinal model example with VGAM package<a class="anchor" aria-label="anchor" href="#ordinal-model-example-with-vgam-package"></a>
+</h2>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.stat.auckland.ac.nz/~yee/VGAM/" class="external-link">VGAM</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: stats4</span></span>
+<span><span class="co">#&gt; Loading required package: splines</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Helper functions to simulate quadratic ordinal response data</span></span>
+<span><span class="va">ordinalize</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">z</span>, <span class="va">threshold</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">z</span>, FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">ordinal.value</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span>    <span class="va">index</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span>    <span class="kw">while</span><span class="op">(</span><span class="va">index</span> <span class="op">&lt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">threshold</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="va">x</span> <span class="op">&gt;</span> <span class="va">threshold</span><span class="op">[</span><span class="va">index</span><span class="op">]</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">ordinal.value</span> <span class="op">&lt;-</span> <span class="va">ordinal.value</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span>      <span class="va">index</span> <span class="op">&lt;-</span> <span class="va">index</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span>    <span class="op">}</span></span>
+<span>    <span class="va">ordinal.value</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">simoqd</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span> <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">threshold</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">8</span><span class="op">)</span></span>
+<span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span>, min <span class="op">=</span> <span class="fl">1</span>, max <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span>
+<span>  <span class="va">z</span> <span class="op">&lt;-</span> <span class="fl">16</span> <span class="op">-</span> <span class="fl">8</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fl">1</span> <span class="op">*</span> <span class="va">x</span> <span class="op">^</span> <span class="fl">2</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>  <span class="co"># rlnorm(n)</span></span>
+<span>  <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">z</span>, FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">zz</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">ordinal.value</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span>    <span class="va">index</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span>    <span class="kw">while</span><span class="op">(</span><span class="va">index</span> <span class="op">&lt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">threshold</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="va">zz</span> <span class="op">&gt;</span> <span class="va">threshold</span><span class="op">[</span><span class="va">index</span><span class="op">]</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">ordinal.value</span> <span class="op">&lt;-</span> <span class="va">ordinal.value</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span>      <span class="va">index</span> <span class="op">&lt;-</span> <span class="va">index</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span>    <span class="op">}</span></span>
+<span>    <span class="va">ordinal.value</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="st">"y"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.ordered</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, <span class="st">"x"</span> <span class="op">=</span> <span class="va">x</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Simulate data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">977</span><span class="op">)</span></span>
+<span><span class="va">oqdf</span> <span class="op">&lt;-</span> <span class="fu">simoqd</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Fit models to simulated ordinal quadratice response data</span></span>
+<span><span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/VGAM/man/vglm.html" class="external-link">vglm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">oqdf</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/VGAM/man/acat.html" class="external-link">acat</a></span><span class="op">(</span>reverse <span class="op">=</span> <span class="cn">TRUE</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/VGAM/man/vglm.html" class="external-link">vglm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">x</span>, degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">oqdf</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/VGAM/man/acat.html" class="external-link">acat</a></span><span class="op">(</span>reverse <span class="op">=</span> <span class="cn">TRUE</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in checkwz(wz, M = M, trace = trace, wzepsilon = control$wzepsilon): 1</span></span>
+<span><span class="co">#&gt; diagonal elements of the working weights variable 'wz' have been replaced by</span></span>
+<span><span class="co">#&gt; 1.819e-12</span></span>
+<span><span class="co">#&gt; Warning in checkwz(wz, M = M, trace = trace, wzepsilon = control$wzepsilon): 6</span></span>
+<span><span class="co">#&gt; diagonal elements of the working weights variable 'wz' have been replaced by</span></span>
+<span><span class="co">#&gt; 1.819e-12</span></span>
+<span><span class="co">#&gt; Warning in checkwz(wz, M = M, trace = trace, wzepsilon = control$wzepsilon): 6</span></span>
+<span><span class="co">#&gt; diagonal elements of the working weights variable 'wz' have been replaced by</span></span>
+<span><span class="co">#&gt; 1.819e-12</span></span>
+<span><span class="va">fit3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/VGAM/man/vgam.html" class="external-link">vgam</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/VGAM/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">oqdf</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/VGAM/man/acat.html" class="external-link">acat</a></span><span class="op">(</span>reverse <span class="op">=</span> <span class="cn">TRUE</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in vgam.fit(x = x, y = y, w = w, mf = mf, Xm2 = Xm2, Ym2 = Ym2, :</span></span>
+<span><span class="co">#&gt; convergence not obtained in 30 IRLS iterations</span></span>
+<span></span>
+<span><span class="co"># Residual plots</span></span>
+<span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/fredplot.html">fredplot</a></span><span class="op">(</span><span class="va">fit1</span>, x <span class="op">=</span> <span class="va">oqdf</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>,  <span class="co"># linear term (wrong)</span></span>
+<span>  <span class="fu"><a href="../reference/fredplot.html">fredplot</a></span><span class="op">(</span><span class="va">fit2</span>, x <span class="op">=</span> <span class="va">oqdf</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>,  <span class="co"># quadratic term</span></span>
+<span>  <span class="fu"><a href="../reference/fredplot.html">fredplot</a></span><span class="op">(</span><span class="va">fit3</span>, x <span class="op">=</span> <span class="va">oqdf</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>,  <span class="co"># smooth term</span></span>
+<span>  nrow <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="intro_files/figure-html/unnamed-chunk-9-1.png" width="100%"></p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Jane Doe.</p>
+  <p>Developed by Brandon M. Greenwell, Zewei Lin, Brad Boehmke, Dungang Liu.</p>
 </div>
 
 <div class="pkgdown-footer-right">

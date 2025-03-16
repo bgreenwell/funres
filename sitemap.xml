@@ -1,11 +1,15 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
-<url><loc>/404.html</loc></url>
-<url><loc>/LICENSE.html</loc></url>
-<url><loc>/authors.html</loc></url>
-<url><loc>/index.html</loc></url>
-<url><loc>/reference/fredplot.html</loc></url>
-<url><loc>/reference/fresiduals.html</loc></url>
-<url><loc>/reference/funres-package.html</loc></url>
-<url><loc>/reference/index.html</loc></url>
+<url><loc>https://bgreenwell.github.io/funres/404.html</loc></url>
+<url><loc>https://bgreenwell.github.io/funres/LICENSE.html</loc></url>
+<url><loc>https://bgreenwell.github.io/funres/articles/index.html</loc></url>
+<url><loc>https://bgreenwell.github.io/funres/articles/intro.html</loc></url>
+<url><loc>https://bgreenwell.github.io/funres/authors.html</loc></url>
+<url><loc>https://bgreenwell.github.io/funres/index.html</loc></url>
+<url><loc>https://bgreenwell.github.io/funres/news/index.html</loc></url>
+<url><loc>https://bgreenwell.github.io/funres/reference/ffplot.html</loc></url>
+<url><loc>https://bgreenwell.github.io/funres/reference/fredplot.html</loc></url>
+<url><loc>https://bgreenwell.github.io/funres/reference/fresiduals.html</loc></url>
+<url><loc>https://bgreenwell.github.io/funres/reference/funres-package.html</loc></url>
+<url><loc>https://bgreenwell.github.io/funres/reference/index.html</loc></url>
 </urlset>
 
