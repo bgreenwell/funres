@@ -29,8 +29,9 @@ probability scale (\code{FALSE}). Default is \code{TRUE}.}
 \item{...}{Additional optional arguments. Currently ignored.}
 }
 \value{
-Either a list of functions (\code{type = "function"}) or a vector of
-residuals.
+Either a list of functions (\code{type = "function"}) that also inherits
+from class \code{"funres"} or a vector of residuals (\code{type = "surrogate"} or
+\code{type = "probscale"}).
 }
 \description{
 Computes the function residual described in \url{TBD}.
@@ -38,7 +39,7 @@ Computes the function residual described in \url{TBD}.
 \examples{
 # Generate data from a logistic regression model with quadratic form
 set.seed(1217)
-n <- 10000
+n <- 1000
 x <- rnorm(n)
 z <- 1 - 2*x + 3*x^2 + rlogis(n)
 y <- ifelse(z > 0, 1, 0)
@@ -47,7 +48,16 @@ y <- ifelse(z > 0, 1, 0)
 fit.wrong <- glm(y ~ x, family = binomial)  # wrong
 fit.right <- glm(y ~ x + I(x^2), family = binomial)  # right
 
-# Surrogate residual vs. predictor plot for each model
+# Generate functional residuals
+fres.wrong <- fresiduals(fit.wrong)
+plot(fres.wrong[[1]])  # plot first functional residual
+
+# Function-function plot
+par(mfrow = c(1, 2))
+ffplot(fres.wrong, type = "l")
+ffplot(fit.wrong, type = "l")
+
+# Residual vs. predictor plot for each model based on surrogate method
 par(mfrow = c(1, 2), las = 1)
 lpars <- list(col = 2, lwd = 2)
 col <- adjustcolor(1, alpha.f = 0.1)
@@ -60,7 +70,6 @@ scatter.smooth(x, y = fresiduals(fit.right, type = "surrogate"),
                lpars = lpars, col = col, main = "Correct model",
                xlab = "x", ylab = "Surrogate residual")
 abline(h = 0, col = 3, lty = 2)
-
 }
 \references{
 TODO: Reference paper when published in JASA.

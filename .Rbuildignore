@@ -6,3 +6,4 @@
 ^pkgdown$
 ^\.github$
 ^manuscript$
+^vignettes/articles$

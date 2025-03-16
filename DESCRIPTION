@@ -3,22 +3,45 @@ Type: Package
 Title: Functional Residuals
 Version: 0.1.0
 Authors@R: c(
-    person(
-      "Jane", "Doe",
-      email = "jane@example.com",
-      role = c("aut", "cre")
-    )
+  person(c("Brandon", "M."), family = "Greenwell", 
+         email = "greenwell.brandon@gmail.com",
+         role = c("aut", "cre"), 
+         comment = c(ORCID = "0000-0002-8120-0084")),
+  person("Zewei", "Lin",
+         email = "pqt19@txstate.edu",
+         role = c("aut")),
+  person("Brad", "Boehmke",
+         email = "bradleyboehmke@gmail.com",
+         role = c("aut"),
+         comment = c(ORCID = "0000-0002-3611-8516")),
+  person("Dungang", "Liu",
+         email = "dungang.liu@uc.edu",
+         role = c("aut"))
   )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
-Imports:
-  ggplot2 (>= 0.9.0)
+Description: An implementation of the functional residual framework described in
+    XYZ. Functional residuals provide a novel diagnostic framework for 
+    generalized linear models (GLMs) and beyond, addressing limitations in 
+    traditional residuals for discrete outcome data. The framework uses 
+    functional residuals, which capture residual randomness that classical point 
+    statistics fail to represent, and provides new diagnostic tools like the 
+    functional-residual-vs-covariate and function-to-function plots. It broadens 
+    the diagnostic scope across various GLMs, including models for binary, 
+    ordinal, count data, and semiparametric models, offering a unified approach 
+    for both discrete and continuous data.
+Depends: R (>= 4.0.0)
 Suggests:
+    gridExtra,
+    hexbin,
+    knitr,
+    lattice,
+    MASS,
     mgcv,
-    patchwork,
+    rmarkdown,
     VGAM
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+URL: https://bgreenwell.github.io/funres/
+VignetteBuilder: knitr

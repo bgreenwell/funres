@@ -9,14 +9,30 @@ fredplot(
   x,
   resolution = 101,
   scale = c("uniform", "normal"),
-  geom = c("hex", "kde", "bin"),
+  type = c("kde", "hex"),
+  n = 100,
+  color.palette = function(n) hcl.colors(n, "YlGnBu"),
+  colorkey = FALSE,
+  smooth = TRUE,
+  smooth.col = "white",
+  smooth.lwd = 1,
+  smooth.lty = "solid",
+  xlab = deparse1(substitute(x)),
+  ylab = "Residual",
   ...
 )
 }
 \arguments{
-\item{object}{An object of class \link{fresiduals}.}
+\item{object}{An object for which the extraction of
+\link[=fresiduals]{functional residuals} is meangingful (e.g., a \link[stats:glm]{glm})
+object.}
 
-\item{x}{Vector of predictor values.}
+\item{x}{Vector of predictor values to use for the x-axis. Ideally, \code{x}
+should represent a continuous variable. Categorical variables should be
+coerced to integer. Using \code{jitter()} can also be useful. For instance,
+something like \code{x = jitter(as.integer(df$x))} could be useful. If \code{x} is
+categorical in nature, it's also recommended to turn off LOESS smoothing by
+setting \code{smooth = FALSE}.}
 
 \item{resolution}{Integer specifying the resolution of the plot. Default
 is 101.}
@@ -24,13 +40,38 @@ is 101.}
 \item{scale}{Character string specifying which scale to use for plotting.
 Default is \code{"uniform"}.}
 
-\item{geom}{Character string providing the type of \link[ggplot2:ggplot2-ggproto]{geom} to
-plot. Current options include \code{"hex"} (the default) for a hexagonal heatmap
-of 2D bin counts, \code{"kde"} for 2D kernel density estimation, or \code{"bin"} for a
-heatmap of 2D bin counts.}
+\item{type}{Character string specifying the type of plot to construct.
+Current options include \code{"hex"} (the default) for a hexagonal heatmap
+of 2D bin counts, or \code{"kde"} for 2D kernel density estimation.}
 
-\item{...}{Additional optional arguments to be passed to the respective
-\link[ggplot2:ggplot2-ggproto]{geom}.}
+\item{n}{Integer specifying the number of grid points in each direction for
+two-dimensional kernel density estimation; passed to \link[MASS:kde2d]{kde2d()}
+whenever \code{type = "kde"}. Default is 100.}
+
+\item{color.palette}{A color palette function to be used to assign colors in
+the plot.}
+
+\item{colorkey}{Logical indicating whether or not a legend should be drawn.
+Default is \code{FALSE}.}
+
+\item{smooth}{Logical indiacting whether or not to include a LOESS smoother.
+Default is \code{TRUE},}
+
+\item{smooth.col}{Integer or character string specifying the line color to
+use for the optional LOESS smoother; default is \code{"white"}.}
+
+\item{smooth.lwd}{Integer specifying the line width to use for the optional
+LOESS smoother; default is 1.}
+
+\item{smooth.lty}{Integer or character string specifying the line type to
+use for the optional LOESS smoother; default is 1 (equivalent to \code{"solid"}).}
+
+\item{xlab, ylab}{Character strings specifying the labels to use for the x-
+and y-axes, respectively.}
+
+\item{...}{Additional optional arguments passed to
+\link[lattice:levelplot]{lattice::levelplot()} (\code{type = "kde"}) or
+\link[hexbin:hexbinplot]{hexbin::hexbinplot()} (\code{type = "hex"}).}
 }
 \description{
 Generates a functional residual-vs-predictor plot, visualizing the density of
@@ -40,25 +81,19 @@ normal scale.
 \examples{
 # Generate data from a logistic regression model with quadratic form
 set.seed(1217)
-n <- 10000
+n <- 1000
 x <- rnorm(n)
 z <- 1 - 2*x + 3*x^2 + rlogis(n)
 y <- ifelse(z > 0, 1, 0)
 
 # Fit models with/without quadratic term
-fit.wrong <- glm(y ~ x, family = binomial)  # wrong
-fit.right <- glm(y ~ x + I(x^2), family = binomial)  # right
-
-library(ggplot2)
-library(patchwork)
-theme_set(theme_bw())
+bad <- glm(y ~ x, family = binomial)  # wrong
+good <- glm(y ~ x + I(x^2), family = binomial)  # right
 
 # Functional REsidual Density plot for each model
-fredplot(fit.wrong, x = x) +
-  scale_fill_distiller(palette = "Spectral") +
-  ggtitle("Wrong model") +
-  fredplot(fit.right, x = x) +
-  scale_fill_distiller(palette = "Spectral") +
-  ggtitle("Correct model")
-
+gridExtra::grid.arrange(
+  fredplot(bad, x = x, type = "hex", aspect = 1),
+  fredplot(good, x = x, type = "hex", aspect = 1),
+  nrow = 1
+)
 }

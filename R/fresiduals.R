@@ -16,8 +16,9 @@
 #'
 #' @param ... Additional optional arguments. Currently ignored.
 #'
-#' @return Either a list of functions (`type = "function"`) or a vector of
-#' residuals.
+#' @return Either a list of functions (`type = "function"`) that also inherits
+#' from class `"funres"` or a vector of residuals (`type = "surrogate"` or
+#' `type = "probscale"`).
 #'
 #' @references
 #' TODO: Reference paper when published in JASA.
@@ -25,9 +26,8 @@
 #' @examples
 #' # Generate data from a logistic regression model with quadratic form
 #' set.seed(1217)
-#' n <- 10000
+#' n <- 1000
 #' x <- rnorm(n)
-#' x[1] <- 100  # add an outlier
 #' z <- 1 - 2*x + 3*x^2 + rlogis(n)
 #' y <- ifelse(z > 0, 1, 0)
 #'
@@ -37,8 +37,14 @@
 #'
 #' # Generate functional residuals
 #' fres.wrong <- fresiduals(fit.wrong)
+#' plot(fres.wrong[[1]])  # plot first functional residual
 #'
-#' # Surrogate residual vs. predictor plot for each model
+#' # Function-function plot
+#' par(mfrow = c(1, 2))
+#' ffplot(fres.wrong, type = "l")
+#' ffplot(fit.wrong, type = "l")
+#'
+#' # Residual vs. predictor plot for each model based on surrogate method
 #' par(mfrow = c(1, 2), las = 1)
 #' lpars <- list(col = 2, lwd = 2)
 #' col <- adjustcolor(1, alpha.f = 0.1)
@@ -51,7 +57,6 @@
 #'                lpars = lpars, col = col, main = "Correct model",
 #'                xlab = "x", ylab = "Surrogate residual")
 #' abline(h = 0, col = 3, lty = 2)
-#'
 #' @export
 fresiduals <- function(object, type = c("function", "surrogate", "probscale"),
                        link.scale = TRUE, ...) {
@@ -61,11 +66,11 @@ fresiduals <- function(object, type = c("function", "surrogate", "probscale"),
     res <- apply(uend, MARGIN = 1, FUN = function(endpoints) {
       function(t) punif(t, min = endpoints[1L], max = endpoints[2L])
     })
+    class(res) <- c("funres", class(res))
   } else if (type == "surrogate") {
     runifs <- apply(uend, MARGIN = 1, FUN = function(endpoints) {
       function(n) runif(n, min = endpoints[1L], max = endpoints[2L])
     })
-    # sapply(runifs, FUN = function(sampler) mean(sampler(300)))
     res <- sapply(runifs, FUN = function(sampler) sampler(1))
     if (isTRUE(link.scale)) {
       linkfun <- object$family$linkfun
