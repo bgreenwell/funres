@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   articles/intro: intro.html
-last_built: 2025-03-16T20:46Z
+last_built: 2025-03-16T21:03Z
 urls:
   reference: https://bgreenwell.github.io/funres/reference
   article: https://bgreenwell.github.io/funres/articles
