@@ -36,6 +36,7 @@ Suggests:
     lattice,
     MASS,
     mgcv,
+    pscl,
     rmarkdown,
     VGAM
 License: GPL (>= 3)

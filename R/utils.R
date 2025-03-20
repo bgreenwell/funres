@@ -108,6 +108,34 @@ unifend.gam <- function(object, ...) {
 
 #' @noRd
 #' @keywords internal
+unifend.zeroinfl <- function(object, y = NULL, ...) {
+  if (!requireNamespace("VGAM", quietly = TRUE)) {
+    stop("Package \"VGAM\" is required for this function to work. ",
+         "Please install it.", call. = FALSE)
+  }
+  if (!requireNamespace("pscl", quietly = TRUE)) {
+    stop("Package \"pscl\" is required for this function to work. ",
+         "Please install it.", call. = FALSE)
+  }
+  if (is.null(y)) {  # get response vector
+    if (is.null(object$y)) {
+      stop("No response vector could be found, please supply it ",
+           "using the `y` argument.", call. = FALSE)
+    } else {
+      y <- object$y
+    }
+  }
+  fv.count <- predict(object, type = "count")
+  fv.binary <- predict(object, type = "zero")
+  res <- cbind(
+    "lwr" = VGAM::pzipois(y - 1, lambda = fv.count, pstr0 = fv.binary),
+    "upr" = VGAM::pzipois(y, lambda = fv.count, pstr0 = fv.binary)
+  )
+}
+
+
+#' @noRd
+#' @keywords internal
 expand <- function(endpoints, resolution = 101, flat = FALSE) {
   # Much faster than `apply()` + `seq()`
   z <- matrix(nrow = nrow(endpoints), ncol = resolution)

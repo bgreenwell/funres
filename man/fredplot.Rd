@@ -11,6 +11,7 @@ fredplot(
   scale = c("uniform", "normal"),
   type = c("kde", "hex"),
   n = 100,
+  plot = TRUE,
   color.palette = function(n) hcl.colors(n, "YlGnBu"),
   colorkey = FALSE,
   smooth = TRUE,
@@ -18,7 +19,7 @@ fredplot(
   smooth.lwd = 1,
   smooth.lty = "solid",
   xlab = deparse1(substitute(x)),
-  ylab = "Residual",
+  ylab = "Residual density",
   ...
 )
 }
@@ -48,6 +49,11 @@ of 2D bin counts, or \code{"kde"} for 2D kernel density estimation.}
 two-dimensional kernel density estimation; passed to \link[MASS:kde2d]{kde2d()}
 whenever \code{type = "kde"}. Default is 100.}
 
+\item{plot}{Logical indicating whether to return a data frame that can be
+plotted manually (\code{FALSE}) or plot the results automatically (\code{TRUE}).
+Default is \code{TRUE}. Setting to \code{FALSE} is useful for debugging or advanced
+usage.}
+
 \item{color.palette}{A color palette function to be used to assign colors in
 the plot.}
 
@@ -72,6 +78,9 @@ and y-axes, respectively.}
 \item{...}{Additional optional arguments passed to
 \link[lattice:levelplot]{lattice::levelplot()} (\code{type = "kde"}) or
 \link[hexbin:hexbinplot]{hexbin::hexbinplot()} (\code{type = "hex"}).}
+}
+\value{
+TBD.
 }
 \description{
 Generates a functional residual-vs-predictor plot, visualizing the density of
