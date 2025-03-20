@@ -31,6 +31,11 @@ x <- y <- NULL
 #' two-dimensional kernel density estimation; passed to [kde2d()][MASS::kde2d]
 #' whenever `type = "kde"`. Default is 100.
 #'
+#' @param plot Logical indicating whether to return a data frame that can be
+#' plotted manually (`FALSE`) or plot the results automatically (`TRUE`).
+#' Default is `TRUE`. Setting to `FALSE` is useful for debugging or advanced
+#' usage.
+#'
 #' @param color.palette A color palette function to be used to assign colors in
 #' the plot.
 #'
@@ -55,6 +60,8 @@ x <- y <- NULL
 #' @param ... Additional optional arguments passed to
 #' [lattice::levelplot()][lattice::levelplot] (`type = "kde"`) or
 #' [hexbin::hexbinplot()][hexbin::hexbinplot] (`type = "hex"`).
+#'
+#' @returns TBD.
 #'
 #' @examples
 #' # Generate data from a logistic regression model with quadratic form
@@ -82,6 +89,7 @@ fredplot <- function(
     scale = c("uniform", "normal"),
     type = c("kde", "hex"),
     n = 100,
+    plot = TRUE,
     color.palette = function(n) hcl.colors(n, "YlGnBu"),
     colorkey = FALSE,
     smooth = TRUE,
@@ -90,7 +98,7 @@ fredplot <- function(
     smooth.lty = "solid",
     xlab = deparse1(substitute(x)),
     # xlab = "Predictor value",
-    ylab = "Residual",
+    ylab = "Residual density",
     ...
 ) {
 
@@ -109,9 +117,14 @@ fredplot <- function(
   df <- if (scale == "uniform") {
     data.frame("x" = xnew, "y" = y)
   } else {
-    y[y == 0] <- 1e-6  # replace 0s with 0.000001
-    y[y == 1] <- 1 - 1e-6  # replace 1s with 0.999999
+    # FIXME: In reproducing the simulated ordinal examples, some of the values
+    # in y appear to be larger that 1 by 2.220446e-16?
+    y[y <= 0] <- 1e-6  # replace 0s with 0.000001
+    y[y >= 1] <- 1 - 1e-6  # replace 1s with 0.999999
     data.frame("x" = xnew, "y" = stats::qnorm(y))
+  }
+  if (isFALSE(plot)) {
+    return(df)
   }
 
   # Construct plot
