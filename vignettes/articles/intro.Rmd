@@ -179,3 +179,29 @@ gridExtra::grid.arrange(
   nrow = 1
 )
 ```
+
+
+## Zero-inflated Poisson (ZIP) model
+
+```{r}
+# library(VGAM)
+# library(pscl)
+
+# Simulate ZIP data
+set.seed(3)
+x <- rnorm(1000, 0, 0.8)
+lp <- 1 + 1 * x  # linear predictor
+lambda <- exp(lp)
+p0 <- exp(1 + 0.2 * x) / (exp( 1 + 0.2 * x) + 1)
+y <- VGAM::rzipois(1000, lambda = lambda, pstr0 = p0)
+df <- cbind.data.frame(x, y)
+
+fit1 <- glm(y ~ x, family = poisson, data = df)
+fit2 <- pscl::zeroinfl(y ~ x, data = df)
+
+gridExtra::grid.arrange(
+  fredplot(fit1, x = x),
+  fredplot(fit2, x = x),
+  ncol = 2
+)
+```
